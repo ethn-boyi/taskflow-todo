@@ -597,9 +597,37 @@ textarea.task-input { resize: vertical; }
 }
 .alarm-dismiss:hover { background: rgba(255,71,87,0.2); }
 
-/* Time input styling */
+/* Date & Time input styling */
+input[type="date"].form-select,
 input[type="time"].form-select {
-  min-width: 120px;
+  min-width: 150px;
+  width: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* Fix for mobile — make them full width and readable */
+@media (max-width: 768px) {
+  input[type="date"].form-select,
+  input[type="time"].form-select {
+    width: 100%;
+    min-width: unset;
+    font-size: 1rem;
+    padding: 0.85rem 1rem;
+    color: var(--text);
+  }
+  .form-extras {
+    flex-direction: column;
+  }
+  .form-extras .form-select {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.85rem 1rem;
+  }
 }
 
 @media (max-width: 480px) {
