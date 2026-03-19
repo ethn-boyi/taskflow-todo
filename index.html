@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow — To-Do App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="todo.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">Task<span>Flow</span></div>
+        <p class="sidebar-sub">Stay organized, stay focused.</p>
+      </div>
+
+      <div class="sidebar-stats">
+        <div class="stat-card">
+          <span class="stat-icon">📋</span>
+          <div>
+            <div class="stat-val" id="totalCount">0</div>
+            <div class="stat-label">Total Tasks</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">✅</span>
+          <div>
+            <div class="stat-val" id="doneCount">0</div>
+            <div class="stat-label">Completed</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🔥</span>
+          <div>
+            <div class="stat-val" id="pendingCount">0</div>
+            <div class="stat-label">Pending</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>Overall Progress</span>
+          <span id="progressPct">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-filter="all">
+          <span>📌</span> All Tasks
+        </button>
+        <button class="nav-item" data-filter="active">
+          <span>⏳</span> Active
+        </button>
+        <button class="nav-item" data-filter="completed">
+          <span>✔️</span> Completed
+        </button>
+        <button class="nav-item" data-filter="high">
+          <span>🔴</span> High Priority
+        </button>
+        <button class="nav-item" data-filter="overdue">
+          <span>⚠️</span> Overdue
+        </button>
+      </nav>
+
+      <button class="clear-btn" id="clearCompleted">🗑 Clear Completed</button>
+    </aside>
+
+    <!-- ── MAIN ── -->
+    <main class="main">
+
+      <!-- Header -->
+      <div class="main-header">
+        <div>
+          <h1 id="filterTitle">All Tasks</h1>
+          <p class="main-sub" id="dateDisplay"></p>
+        </div>
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Search tasks..." class="search-input" />
+        </div>
+      </div>
+
+      <!-- Add Task Form -->
+      <div class="add-form">
+        <div class="form-row">
+          <input type="text" id="taskInput" placeholder="Add a new task..." class="task-input" />
+          <button class="add-btn" id="addBtn">+ Add Task</button>
+        </div>
+        <div class="form-row form-extras">
+          <select id="prioritySelect" class="form-select">
+            <option value="low">🟢 Low Priority</option>
+            <option value="medium" selected>🟡 Medium Priority</option>
+            <option value="high">🔴 High Priority</option>
+          </select>
+          <select id="categorySelect" class="form-select">
+            <option value="general">📁 General</option>
+            <option value="work">💼 Work</option>
+            <option value="personal">🏠 Personal</option>
+            <option value="shopping">🛒 Shopping</option>
+            <option value="health">💪 Health</option>
+          </select>
+          <input type="date" id="dueDateInput" class="form-select" />
+          <input type="time" id="dueTimeInput" class="form-select" placeholder="Time" />
+        </div>
+      </div>
+
+      <!-- Sort Bar -->
+      <div class="sort-bar">
+        <span class="sort-label">Sort by:</span>
+        <button class="sort-btn active" data-sort="date-added">Date Added</button>
+        <button class="sort-btn" data-sort="due-date">Due Date</button>
+        <button class="sort-btn" data-sort="priority">Priority</button>
+        <button class="sort-btn" data-sort="name">Name</button>
+      </div>
+
+      <!-- Task List -->
+      <div class="task-list" id="taskList">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">🎯</div>
+          <h3>No tasks yet!</h3>
+          <p>Add your first task above to get started.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ── EDIT MODAL ── -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Edit Task</h2>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Task Name</label>
+          <input type="text" id="editTaskInput" class="task-input" />
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <select id="editPriority" class="form-select" style="width:100%">
+            <option value="low">🟢 Low</option>
+            <option value="medium">🟡 Medium</option>
+            <option value="high">🔴 High</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="editCategory" class="form-select" style="width:100%">
+            <option value="general">📁 General</option>
+            <option value="work">💼 Work</option>
+            <option value="personal">🏠 Personal</option>
+            <option value="shopping">🛒 Shopping</option>
+            <option value="health">💪 Health</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Due Date</label>
+          <div style="display:flex; gap:0.8rem;">
+            <input type="date" id="editDueDate" class="form-select" style="flex:1" />
+            <input type="time" id="editDueTime" class="form-select" style="flex:1" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="editNotes" class="task-input" rows="3" placeholder="Add notes..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="modalCancel">Cancel</button>
+        <button class="btn-save" id="modalSave">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alarm Toast -->
+  <div class="alarm-toast" id="alarmToast">
+    <div class="alarm-icon">⏰</div>
+    <div class="alarm-body">
+      <div class="alarm-title" id="alarmTitle">Task Reminder</div>
+      <div class="alarm-msg" id="alarmMsg"></div>
+    </div>
+    <div class="alarm-actions">
+      <button class="alarm-snooze" id="alarmSnooze">Snooze 5m</button>
+      <button class="alarm-dismiss" id="alarmDismiss">Dismiss</button>
+    </div>
+  </div>
+
+  <script src="todo.js"></script>
+</body>
+</html>
